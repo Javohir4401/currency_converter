@@ -33,9 +33,12 @@
     </form>
 
     <?php
-        
-    $dsn = "mysql:host=localhost;dbname=work";
-    $pdo = new PDO($dsn, username: "root", password: "1112");
+
+    require '2.php';
+    
+    $db = new DB();
+
+    $pdo = $db->pdo;
 
     const required_work_hour_daily = 8;
     
