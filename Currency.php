@@ -1,17 +1,29 @@
 <?php
+require 'vendor/autoload.php';
+
+use GuzzleHttp\Client;
+
 class Currency {
+    
     const CURRENCY_API_URL = "https://cbu.uz/uz/arkhiv-kursov-valyut/json/";
 
+    public $client;
     private array $currencies = [];
 
     public function __construct() {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, self::CURRENCY_API_URL);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
-        curl_close($ch);
+        // $ch = curl_init();
+        // curl_setopt($ch, CURLOPT_URL, self::CURRENCY_API_URL);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // $output = curl_exec($ch);
+        // curl_close($ch);
+        // $this->currencies = json_decode($output, true);
 
-        $this->currencies = json_decode($output, true);
+        $this->client = new Client([
+            'base_uri' => self::CURRENCY_API_URL,
+            'timeout'  => 2.0,
+        ]);
+        $response = $this->client->request('GET');
+        $this->currencies = json_decode($response->getBody()->getContents(), true);
     }
 
     public function getCurrencies(): array {
